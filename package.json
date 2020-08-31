@@ -1,6 +1,6 @@
 {
   "name": "backstop-generator",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "type": "module",
@@ -14,8 +14,12 @@
     "report": "backstop openReport --config",
     "approve": "backstop approve --config"
   },
+  "bugs": {
+    "url": "https://github.com/lalilaloe/backstop-generator/issues"
+  },
+  "homepage": "https://github.com/lalilaloe/backstop-generator#readme",
   "author": "lalilaloe",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "backstop": "^1.0.1",
     "commander": "^6.0.0",
