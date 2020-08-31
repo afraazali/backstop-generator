@@ -1,0 +1,25 @@
+{
+  "name": "backstop-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "backstopgen": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "setup": "backstop reference --config",
+    "check": "backstop test --config",
+    "report": "backstop openReport --config",
+    "approve": "backstop approve --config"
+  },
+  "author": "lalilaloe",
+  "license": "ISC",
+  "dependencies": {
+    "backstop": "^1.0.1",
+    "commander": "^6.0.0",
+    "jsonfile": "^6.0.1",
+    "sitemapper": "^3.0.5"
+  }
+}
