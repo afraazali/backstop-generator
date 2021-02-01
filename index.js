@@ -18,15 +18,19 @@ const combineContents = (name, scenarios = [], paths) => {
     }
 }
 
+const getSitemap = async (domain, www) => {
+    return await sitemap.fetch(`https://${www ? 'www.' : ''}${domain}/sitemap.xml`)
+}
+
 const createConfig = async (domain) => {
     const scenarios = []
-    let res = await sitemap.fetch(`https://${domain}/sitemap.xml`)
+    let res = await getSitemap(domain)
     if (!res.sites.length) {
-        console.log("Sitemap not found, trying www.", domain)
-        res = await sitemap.fetch(`https://www.${domain}/sitemap.xml`)
+        console.log(`Sitemap not found, trying www.${domain}`)
+        res = await getSitemap(domain, true)
     }
     if (res.sites.length) {
-        console.log(`Sitemap ok, found ${res.sites.length} pages. Creating config`, domain)
+        console.log(`Sitemap ${domain} ok, found ${res.sites.length} pages. Creating config`, domain)
         for (const key in res.sites) {
             if (res.sites.hasOwnProperty(key)) {
                 const url = res.sites[key];
@@ -56,7 +60,7 @@ const createConfig = async (domain) => {
         console.log("run: npm run setup", domain)
         console.log("to generate a reference report")
     } else {
-        console.log(`ERROR: Sitemap not found or empty, make sure https://${domain}/sitemap.xml exist`)
+        console.log(`ERROR: Sitemap not found or empty, make sure ${res.url} exist`)
     }
 }
 
@@ -71,7 +75,7 @@ if (!program.args[0]) {
     console.log("ERROR: No url was given\n")
     program.help()
 } else if(program.args[0]) {
-    program.site = program.args[0]
+    program.site = program.args[0].replace(/www./, '').trim()
 }
 
 if (program.domains) {
