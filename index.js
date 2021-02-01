@@ -63,19 +63,19 @@ const createConfig = async (domain) => {
 program
     .version('0.0.1')
     .description("An CLI used to generate backstop configs from sitemaps")
-    .option('-h, --help', 'Show help')
     .option('-s, --site <url>', 'Set url')
     .option('-d, --domains <lang,lang>', 'Set of domains extentions to check ex; de,com')
 
 program.parse(process.argv)
 if (!program.args[0]) {
-    console.log("No url was given")
-    process.exit()
-} else {
+    console.log("ERROR: No url was given\n")
+    program.help()
+} else if(program.args[0]) {
     program.site = program.args[0]
 }
-console.log("Creating config for", program.args[0])
+
 if (program.domains) {
+    console.log("Creating config for", program.args[0])
     program.domains = program.domains.split(",")
     createConfig(program.site)
     for (const key in program.domains) {
@@ -85,7 +85,7 @@ if (program.domains) {
             createConfig(domain + extension)
         }
     }
-} else {
+} else if (program.site){
     createConfig(program.site)
 }
 

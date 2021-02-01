@@ -12,7 +12,8 @@
     "setup": "backstop reference --config",
     "check": "backstop test --config",
     "report": "backstop openReport --config",
-    "approve": "backstop approve --config"
+    "approve": "backstop approve --config",
+    "add": "npm install -g ."
   },
   "bugs": {
     "url": "https://github.com/lalilaloe/backstop-generator/issues"
