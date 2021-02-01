@@ -1,5 +1,6 @@
 *
 !*.js
+!*.cjs
 !.gitignore
 !package.json
 !package-lock.json

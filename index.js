@@ -12,7 +12,6 @@ const combineContents = (name, scenarios = [], paths) => {
             viewports: viewports,
             scenarios: scenarios,
             paths: paths,
-
         },
         ...other
     }
@@ -36,7 +35,7 @@ const createConfig = async (domain) => {
                 const url = res.sites[key];
                 scenarios.push({
                     ...{
-                        label: url.replace(domain, '').replace("https://www.", '').replace('//', '').replace('ttps:/', '').slice(0, -1).substring(1), // Strip url except path to get page name ;)
+                        label: url.replace(domain, '').replace(/https:|www.|http:|\/\//g, ''), // Strip url except path to get page name ;)
                         url: url
                     },
                     ...scenario
