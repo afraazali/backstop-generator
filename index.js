@@ -43,20 +43,20 @@ const createConfig = async (domain) => {
             }
         }
         const paths = {
-            "bitmaps_reference": domain + "/bitmaps_reference",
-            "bitmaps_test": domain + "/bitmaps_test",
-            "engine_scripts": domain + "/engine_scripts",
-            "html_report": domain + "/html_report",
-            "ci_report": domain + "/ci_report"
+            "bitmaps_reference": domain.replace(/\/.*/, "") + "/bitmaps_reference",
+            "bitmaps_test": domain.replace(/\/.*/, "") + "/bitmaps_test",
+            "engine_scripts": domain.replace(/\/.*/, "") + "/engine_scripts",
+            "html_report": domain.replace(/\/.*/, "") + "/html_report",
+            "ci_report": domain.replace(/\/.*/, "") + "/ci_report"
         }
-        jsonfile.writeFile(`./${domain}.json`,
-            combineContents(domain, scenarios, paths),
+        jsonfile.writeFile(`./${domain.replace(/\/.*/, "")}.json`,
+            combineContents(domain.replace(/\/.*/, ""), scenarios, paths),
             { spaces: 2 },
             function (err) {
                 if (err) console.error(err)
             })
         console.log(`Succesfully generated config for ${res.sites.length} pages on`, domain)
-        console.log("run: npm run setup", domain)
+        console.log("run: npm run setup", domain.replace(/\/.*/, ""))
         console.log("to generate a reference report")
     } else {
         console.log(`ERROR: Sitemap not found or empty, make sure ${res.url} exist`)
@@ -73,7 +73,7 @@ program.parse(process.argv)
 if (!program.args[0]) {
     console.log("ERROR: No url was given\n")
     program.help()
-} else if(program.args[0]) {
+} else if (program.args[0]) {
     program.site = program.args[0].replace(/www./, '').trim()
 }
 
@@ -88,7 +88,7 @@ if (program.domains) {
             createConfig(domain + extension)
         }
     }
-} else if (program.site){
+} else if (program.site) {
     createConfig(program.site)
 }
 
