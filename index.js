@@ -42,21 +42,22 @@ const createConfig = async (domain) => {
                 })
             }
         }
+        const id = domain.replace(/\//g, "-")
         const paths = {
-            "bitmaps_reference": domain.replace(/\/.*/, "") + "/bitmaps_reference",
-            "bitmaps_test": domain.replace(/\/.*/, "") + "/bitmaps_test",
-            "engine_scripts": domain.replace(/\/.*/, "") + "/engine_scripts",
-            "html_report": domain.replace(/\/.*/, "") + "/html_report",
-            "ci_report": domain.replace(/\/.*/, "") + "/ci_report"
+            "bitmaps_reference": id + "/bitmaps_reference",
+            "bitmaps_test": id + "/bitmaps_test",
+            "engine_scripts": id + "/engine_scripts",
+            "html_report": id + "/html_report",
+            "ci_report": id + "/ci_report"
         }
-        jsonfile.writeFile(`./${domain.replace(/\/.*/, "")}.json`,
-            combineContents(domain.replace(/\/.*/, ""), scenarios, paths),
+        jsonfile.writeFile(`./${id}.json`,
+            combineContents(id, scenarios, paths),
             { spaces: 2 },
             function (err) {
                 if (err) console.error(err)
             })
         console.log(`Succesfully generated config for ${res.sites.length} pages on`, domain)
-        console.log("run: npm run setup", domain.replace(/\/.*/, ""))
+        console.log("run: npm run setup", id)
         console.log("to generate a reference report")
     } else {
         console.log(`ERROR: Sitemap not found or empty, make sure ${res.url} exist`)
