@@ -22,9 +22,9 @@
   "author": "lalilaloe",
   "license": "MIT",
   "dependencies": {
-    "backstopjs": "^5.1.0",
-    "commander": "^6.0.0",
-    "jsonfile": "^6.0.1",
-    "sitemapper": "^3.0.5"
+    "backstopjs": "^6.3.25",
+    "commander": "^13.1.0",
+    "jsonfile": "^6.1.0",
+    "sitemapper": "^3.2.20"
   }
 }

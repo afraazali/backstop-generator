@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import program from 'commander';
+import { Command } from 'commander';
 import jsonfile from 'jsonfile';
 import Sitemapper from 'sitemapper';
 import { other, scenario, viewports } from './defaults.js';
@@ -37,7 +37,7 @@ const createConfig = async (domain, reference = null) => {
                     ...{
                         label: url.replace(domain, '').replace(/https:|www.|http:|\/\//g, ''), // Strip url except path to get page name ;)
                         url: url,
-                        reference: reference ? `${reference}${url.replace(domain, '').replace(/https:|www.|http:|\/\//g, '')}` : "",
+                        referenceUrl: reference ? `${reference}${url.replace(domain, '').replace(/https:|www.|http:|\/\//g, '')}` : "",
                     },
                     ...scenario
                 })
@@ -65,35 +65,34 @@ const createConfig = async (domain, reference = null) => {
     }
 }
 
+const program = new Command()
+
 program
-    .version('0.0.1')
+    .version('1.0.0')
     .description("An CLI used to generate backstop configs from sitemaps")
-    .option('-s, --site <url>', 'Set url')
+    .argument('<url>', 'Set url')
     .option('-d, --domains <lang,lang>', 'Set of domains extentions to check ex; de,com')
     .option('-r, --reference <url>', 'Reference url')
 
-program.parse(process.argv)
-if (!program.args[0]) {
-    console.log("ERROR: No url was given\n")
-    program.help()
-} else if (program.args[0]) {
-    program.site = program.args[0].replace(/www./, '').trim()
-}
+program.parse()
 
-program.reference = program.args[1] ?? null;
+const options = program.opts();
 
-if (program.domains) {
-    console.log("Creating config for", program.args[0])
+const site = program.args[0];
+const reference = options.reference ?? null;
+
+if (options.domains) {
+    console.log("Creating config for", site)
     program.domains = program.domains.split(",")
-    createConfig(program.site, program.reference)
+    createConfig(program.site, reference)
     for (const key in program.domains) {
-        if (program.domains.hasOwnProperty(key)) {
-            const extension = program.domains[key].indexOf('.') ? ('.' + program.domains[key]) : program.domains[key]; // if input is .de,.com instead of de,com,es for example; add a dot
-            const domain = program.site.substring(0, program.site.indexOf('.')) // Strip domain extention
-            createConfig(domain + extension, program.reference)
+        if (options.domains.hasOwnProperty(key)) {
+            const extension = options.domains[key].indexOf('.') ? ('.' + options.domains[key]) : options.domains[key]; // if input is .de,.com instead of de,com,es for example; add a dot
+            const domain = site.substring(0, site.indexOf('.')) // Strip domain extention
+            createConfig(domain + extension, reference)
         }
     }
-} else if (program.site) {
-    createConfig(program.site, program.reference)
+} else {
+    createConfig(site, reference)
 }
 

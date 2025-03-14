@@ -12,7 +12,6 @@ const viewports = [
 ]
 
 const scenario = {
-    "referenceUrl": "",
     "readyEvent": "",
     "readySelector": "",
     "delay": 0,
