@@ -21,7 +21,7 @@ const getSitemap = async (domain, www) => {
     return await sitemap.fetch(`https://${www ? 'www.' : ''}${domain}/sitemap.xml`)
 }
 
-const createConfig = async (domain) => {
+const createConfig = async (domain, reference = null) => {
     const scenarios = []
     let res = await getSitemap(domain)
     if (!res.sites.length) {
@@ -36,7 +36,8 @@ const createConfig = async (domain) => {
                 scenarios.push({
                     ...{
                         label: url.replace(domain, '').replace(/https:|www.|http:|\/\//g, ''), // Strip url except path to get page name ;)
-                        url: url
+                        url: url,
+                        reference: reference ? `${reference}${url.replace(domain, '').replace(/https:|www.|http:|\/\//g, '')}` : "",
                     },
                     ...scenario
                 })
@@ -69,6 +70,7 @@ program
     .description("An CLI used to generate backstop configs from sitemaps")
     .option('-s, --site <url>', 'Set url')
     .option('-d, --domains <lang,lang>', 'Set of domains extentions to check ex; de,com')
+    .option('-r, --reference <url>', 'Reference url')
 
 program.parse(process.argv)
 if (!program.args[0]) {
@@ -78,18 +80,20 @@ if (!program.args[0]) {
     program.site = program.args[0].replace(/www./, '').trim()
 }
 
+program.reference = program.args[1] ?? null;
+
 if (program.domains) {
     console.log("Creating config for", program.args[0])
     program.domains = program.domains.split(",")
-    createConfig(program.site)
+    createConfig(program.site, program.reference)
     for (const key in program.domains) {
         if (program.domains.hasOwnProperty(key)) {
             const extension = program.domains[key].indexOf('.') ? ('.' + program.domains[key]) : program.domains[key]; // if input is .de,.com instead of de,com,es for example; add a dot
             const domain = program.site.substring(0, program.site.indexOf('.')) // Strip domain extention
-            createConfig(domain + extension)
+            createConfig(domain + extension, program.reference)
         }
     }
 } else if (program.site) {
-    createConfig(program.site)
+    createConfig(program.site, program.reference)
 }
 
