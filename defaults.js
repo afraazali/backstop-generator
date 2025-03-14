@@ -26,6 +26,7 @@ const scenario = {
     "misMatchThreshold": 0.1,
     "requireSameDimensions": true,
     "onBeforeScript": "../../onBefore.cjs",
+    "cookiePath": "backstop_data/engine_scripts/cookies.json",
 }
 
 const other = {
